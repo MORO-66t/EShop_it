@@ -3,11 +3,11 @@ $GLOBALS['DBHOST'] = "localhost";
 $GLOBALS['DBNAME'] = "shopit";
 $GLOBALS['DBUSER'] = "root";
 $GLOBALS['DBPASS'] = "";
-include("top.php");
+include_once("top.php");
 
 
 
-include("Eloquent.php");
+include_once("Eloquent.php");
 
 $eloquent = new Eloquent;
 
