@@ -64,4 +64,19 @@
 			$categoryMenu = $eloquent->selectData($columnName, $tableName, @$whereValue);
 
 
-            
+            $columnName = $tableName = $joinType = $onCondition = $whereValue = $formatBy = null;
+            $columnName["1"] = "shopcarts.quantity";
+            $columnName["2"] = "products.id";
+            $columnName["3"] = "products.product_name";
+            $columnName["4"] = "products.product_price";
+            // $columnName["5"] = "products.product_master_image";
+            $columnName["5"] = "shopcarts.size";
+            $columnName["6"] = "shopcarts.color";
+            $tableName["MAIN"] = "shopcarts";
+            $joinType = "INNER";
+            $tableName["1"] = "products";
+            $onCondition["1"] = ["shopcarts.product_id", "products.id"];
+            $whereValue["shopcarts.customer_id"] = @$_SESSION['SSCF_login_id'];
+            $formatBy["DESC"] = "shopcarts.id";
+            $myaddcartItems = $eloquent->selectJoinData($columnName, $tableName, $joinType, $onCondition, @$whereValue,
+            @$formatBy, @$paginate);
