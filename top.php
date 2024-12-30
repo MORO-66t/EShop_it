@@ -46,3 +46,22 @@
     <script src="public/assets/js/jquery.min.js"></script>
 
 </head>
+
+
+<body>
+
+    <?php
+			include("app/Models/Eloquent.php");
+			
+			$eloquent = new Eloquent;
+			
+			
+
+			$columnName = $tableName = $whereValue = null;
+			$columnName = "*";
+			$tableName = "categories";
+			$whereValue['category_status'] = "Active";
+			$categoryMenu = $eloquent->selectData($columnName, $tableName, @$whereValue);
+
+
+            
