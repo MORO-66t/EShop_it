@@ -1,10 +1,9 @@
 <?php
 
-include("app/Http/Controllers/View.php");
+include("View.php");
 
 $view = new View;
 
-$view->loadContent("include", "session");
- include("top.php")
+ include("top.php");
 $view->loadContent("content", "category");
  
