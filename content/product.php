@@ -56,7 +56,6 @@ $breadcrumbName = $eloquent->selectJoinData($columnName, $tableName, $joinType, 
                         <div class="col-lg-7 col-md-6 product-single-gallery">
                             <div class="product-slider-container product-item">
 
-                                <!--=*= PRODUCT IMAGE CAROUSEL START =*=-->
                                 <div class="product-single-carousel owl-carousel owl-theme">
 
                                     <?php
@@ -66,45 +65,16 @@ $breadcrumbName = $eloquent->selectJoinData($columnName, $tableName, $joinType, 
                                         data-zoom-image="'. $imagesResult[0]['image_name'].'">
                                     </div>									
                                     ';
-                                    // foreach($imagesResult as $eachImage) // [CHANGED] Loop through imagesResult to display product images
-                                    // {
-                                    //     $image = $eachImage['image_name'];
-									// 	if ($_SESSION['SSCF_product_product_id'] < 142) {
-										
-									// 		$image =  $GLOBALS['PRODUCT_DIRECTORY'] . $eachImage['image_name'];
-									// 	}
-                                    //     echo '
-                                    //     <div class="product-item">
-                                    //         <img class="product-single-image" src="'. $image .'"
-                                    //         data-zoom-image="'. $productResult[0]['img'].'">
-                                    //     </div>									
-                                    //     ';
-                                    // }
                                     ?>
 
                                 </div>
                                 <span class="prod-full-screen"><i class="icon-plus"></i></span>
-                                <!--=*= PRODUCT IMAGE CAROUSEL END =*=-->
+
                             </div>
 
-                            <!--=*= PRODUCT IMAGE THUMBNAIL START =*=-->
                             <div class="prod-thumbnail row owl-dots" id='carousel-custom-dots'>
 
                                 <?php
-                                // foreach($imagesResult as $eachImage) // [CHANGED] Loop through imagesResult to display image thumbnails
-                                // {
-                                //     $image = $eachImage['image_name'];
-								// 		if ($_SESSION['SSCF_product_product_id'] < 142) {
-										
-								// 			$image =  $GLOBALS['PRODUCT_DIRECTORY'] . $eachImage['image_name'];
-								// 		}
-                                //     echo '
-                                //     <div class="col-3 owl-dot">
-                                //         <img src="'. $image .'"/>
-                                //     </div>										
-                                //     ';
-                                // }
-                                // >
                                 echo '
                                 <div class="col-3 owl-dot">
                                     <img src="'. $imagesResult[0]['image_name'] .'"/>
@@ -128,37 +98,22 @@ $breadcrumbName = $eloquent->selectJoinData($columnName, $tableName, $joinType, 
                         <div class="col-lg-5 col-md-6">
                             <div class="product-single-details">
                                 <h1 class="product-title">
-                                <!-- <br> -->
+
                                     <?php
-										#== PRODUCT NAME
 										 echo   $productResult[0]['product_name']; 
 									?>
-<!-- </br> -->
                                 </h1>
-                                <!-- <div class="ratings-container">
-									<div class="product-ratings">
-										<span class="ratings" style="width:60%"></span>
-									</div>
-									<a href="#" class="rating-link">( 6 Reviews )</a>
-								</div> -->
                                 <div class="price-box">
                                     <span class="product-price">
 
                                         <?php
-											#== PRODUCT PRICE
-											// $GLOBALS['CURRENCY'] = "&#163;" ;
+
 											echo $GLOBALS['CURRENCY'] . " " . $productResult[0]['product_price'];
 										?>
 
                                     </span>
                                 </div>
                                 <div class="product-desc">
-
-                                    <!-- <php 
-										#== PRODUCT SUMMARY DATA
-										echo $productResult[0]['product_summary'];
-									?> -->
-
                                 </div>
                                 <?php
                 foreach ($productResult as $eachImage) {
@@ -284,12 +239,6 @@ echo '<div class="product-action product-all-icons">
                                 display: inline !important;
                             }
                         </style>
-                        <!-- <li class="nav-item">
-							<a class="nav-link" id="product-tab-tags" data-toggle="tab" href="#product-tags-content" role="tab" aria-controls="product-tags-content" aria-selected="false">Tags</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" id="product-tab-reviews" data-toggle="tab" href="#product-reviews-content" role="tab" aria-controls="product-reviews-content" aria-selected="false">Reviews</a>
-						</li> -->
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="product-desc-content" role="tabpanel"
@@ -300,7 +249,6 @@ echo '<div class="product-action product-all-icons">
                                         aria-labelledby="product-tab-desc">
                                         <div class="product-desc-content text-justify" style="direction: rtl; text-align: right;">
                                             <?php
-                                                // Decode HTML entities and display the product details
                                                 $prodDescription = htmlspecialchars_decode($productResult[0]['product_details']);
                                                 echo $prodDescription;
                                                 ?>
@@ -308,7 +256,6 @@ echo '<div class="product-action product-all-icons">
                                     </div>
                                 </div>
                                 <!-- <?php 
-									#== PRODUCT DETAILS DATA
                                     
 									$prodDescription = htmlspecialchars_decode($productResult[0]['product_details']);
 									
