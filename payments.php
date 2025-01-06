@@ -5,6 +5,6 @@ include("app/Http/Controllers/View.php");
 $view = new View;
 
 $view->loadContent("include", "session");
-$view->loadContent("include", "top");
+ include("top.php")
 $view->loadContent("content", "payments");
-$view->loadContent("include", "tail");
+ 

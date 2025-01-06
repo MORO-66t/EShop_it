@@ -1,9 +1,9 @@
 <?php
 
-include("app/Http/Controllers/View.php");
+include_once("View.php");
 
 $view = new View;
 
-$view->loadContent("include", "top");
+include("top.php");
 $view->loadContent("content", "register-account");
-$view->loadContent("include", "tail");
+ 

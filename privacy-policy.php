@@ -3,6 +3,6 @@ include("app/Http/Controllers/View.php");
 
 $view = new View;
 
-$view->loadContent("include", "top");
+ include("top.php")
 $view->loadContent("content", "privacy-policy");
-$view->loadContent("include", "tail");
+ 
