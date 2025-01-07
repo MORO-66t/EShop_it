@@ -83,6 +83,35 @@
       $myaddcartItems = $eloquent->selectJoinData($columnName, $tableName, $joinType, $onCondition, @$whereValue,
       @$formatBy, @$paginate);
 
+      if (isset($_POST['add_to_cart'])) {
+
+        if (@$_SESSION['SSCF_login_id'] > 0) {
+            $columnName = "*";
+            $tableName = "shopcarts";
+            $whereValue["customer_id"] = $_SESSION['SSCF_login_id'];
+            $whereValue["product_id"] = $_POST['cart_product_id'];
+            $availabilityInCart = $eloquent->selectData($columnName, $tableName, @$whereValue);
+
+            if (!empty($availabilityInCart)) {
+                $columnValue["quantity"] = $_POST['cart_product_quantity'] + $availabilityInCart[0]['quantity'];
+                $whereValue["customer_id"] = $_SESSION['SSCF_login_id'];
+                $whereValue["product_id"] = $_POST['cart_product_id'];
+                $updateCartResult = $eloquent->updateData($tableName, $columnValue, @$whereValue);
+                $_SESSION['ADD_TO_CART_RESULT'] = $updateCartResult;
+            } else {
+                $columnValue["customer_id"] = @$_SESSION['SSCF_login_id'];
+                $columnValue["product_id"] = $_POST['cart_product_id'];
+                $columnValue["quantity"] = $_POST['cart_product_quantity'];
+                $columnValue["color"] = $_POST['cart_product_color']; // Add color data
+                $columnValue["size"] = $_POST['cart_product_size']; // Add size data
+                $columnValue["created_at"] = date("Y-m-d H:i:s");
+                $addToCartResult = $eloquent->insertData($tableName, $columnValue);
+                $_SESSION['ADD_TO_CART_RESULT'] = $addToCartResult;
+            }
+        } else {
+            $_SESSION['ADD_TO_CART_RESULT'] = 0;
+        }
+    }
     ?> 
 <div class="page-wrapper">
 <header class="header" id="header">
@@ -119,7 +148,6 @@
                     <div class="header-menu">
                         <ul>
                             <li><a href="dashboard.php">حسابي </a></li>
-                            <!-- <li><a href="contact.php">Contact</a></li>  -->
                             <?php 
 					if(@$_SESSION['SSCF_login_id'] > 0) 
 					{
