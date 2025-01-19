@@ -1,7 +1,7 @@
 <?php
 ## ===*=== [C]ALLING CONTROLLER ===*=== ##
-include("app/Http/Controllers/Controller.php");
-include("app/Http/Controllers/AdminController.php");
+include(" Controller.php");
+include(" AdminController.php");
 
 
 ## ===*=== [O]BJECT DEFINED ===*===  ##

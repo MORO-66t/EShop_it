@@ -1,6 +1,6 @@
 <?php
 ## ===*=== [C]ALLING CONTROLLER ===*=== ##
-include("app/Http/Controllers/Controller.php");
+include(" Controller.php");
 
 
 ## ===*=== [O]BJECT DEFINED ===*=== ##

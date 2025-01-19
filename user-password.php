@@ -1,6 +1,6 @@
 <?php
 
-include("app/Http/Controllers/View.php");
+include(" View.php");
 
 $view = new View;
 
