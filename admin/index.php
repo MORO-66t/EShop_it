@@ -1,10 +1,10 @@
 <?php
-### INCLUDE VIEW CLASS
-include(" View.php");
 
-## [O]bject Defined 
+include("View.php");
+
+
 $view = new View;
 
-## [M]ethod Execute | VIEW CLASS
+
 $view->loadContent("content", "login");
 ?>

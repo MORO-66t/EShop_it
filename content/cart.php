@@ -1,8 +1,5 @@
 <?php
-## ===*=== [C]ALLING CONTROLLER ===*=== ##
-include("Controller.php");
 
-$control = new Controller;
 $eloquent = new Eloquent;
 
 if(isset($_POST['update_cart']))
@@ -57,45 +54,6 @@ $onCondition["2"] = ["products.id" , "product_images.product_id"];
 $whereValue["shopcarts.customer_id"] = @$_SESSION['SSCF_login_id'];
 $formatBy["DESC"] = "shopcarts.id";
 $mypho = $eloquent->selectJoinData($columnName, $tableName, $joinType, $onCondition, @$whereValue, @$formatBy, @$paginate);
-
-$_POST['fob'] = 40;
-if(isset($_POST['fob']))
-{
-	if(@$_SESSION['SSCF_login_id'] > 0)
-	{
-		$columnName = $tableName = $whereValue = null;
-		$columnName = "*";
-		$tableName = "deliveries";
-		$whereValue["customer_id"] = $_SESSION['SSCF_login_id'];
-		$availibilityCharge = $eloquent->selectData($columnName, $tableName, @$whereValue);
-		
-		if(!empty($availibilityCharge))
-		{
-			$_POST['shipping_method'] = 40;
-			$columnValue = $tableName = $whereValue = null;
-			$tableName = "deliveries";
-			$columnValue["created_at"] = date("Y-m-d H:i:s");
-			$columnValue["shipping_charge"] = $_POST['shipping_method'];
-			$whereValue["customer_id"] = $_SESSION['SSCF_login_id'];
-			$updateCharge = $eloquent->updateData($tableName, $columnValue, @$whereValue);
-		}
-				else
-		{
-			$_POST['shipping_method'] = 40;
-			$columnValue = $tableName = null;
-			$tableName = "deliveries";
-			$columnValue["created_at"] = date("Y-m-d H:i:s");
-			$columnValue["customer_id"] = $_SESSION['SSCF_login_id'];
-			$columnValue["shipping_charge"] = $_POST['shipping_method'];
-			$insertCharge = $eloquent->insertData($tableName, $columnValue, @$whereValue);
-		}
-	}
-}
-$columnName = $tableName = $whereValue = null;
-$columnName = "*";
-$tableName = "deliveries";
-$deliveryCharge = $eloquent->selectData($columnName, $tableName, @$whereValue);
-@$fobCost = $deliveryCharge[0]['shipping_charge'] = 40;
 ?>
 
 <!--=*= CART SECTION START =*=-->
@@ -103,8 +61,8 @@ $deliveryCharge = $eloquent->selectData($columnName, $tableName, @$whereValue);
 	<nav aria-label="breadcrumb" class="breadcrumb-nav mb-1">
 		<div class="container">
 			<ol class="breadcrumb">
-				<li class="breadcrumb-item"><a href="index.php">الرئيسية</a></li>
-				<li class="breadcrumb-item active" aria-current="page">سلة المشتريات</li>
+				<li class="breadcrumb-item"><a href="index.php">Home</a></li>
+				<li class="breadcrumb-item active" aria-current="page">Shopping Cart</li>
 			</ol>
 		</div>
 	</nav>
@@ -118,35 +76,11 @@ $deliveryCharge = $eloquent->selectData($columnName, $tableName, @$whereValue);
 					{
 						if($deleteCart > 0)
 						{
-							echo '<div class="alert alert-success">تم المسح من السلة بنجاح</div>';
+							echo '<div class="alert alert-success">Successfully removed from the cart</div>';
 						} 
 						else 
 						{
-							echo '<div class="alert alert-danger">لم نستطع الازاله تأكد من عدم وجود خطأ او تواصل معنا</div>';
-						}
-					}
-					
-					#== DISCOUNT CONFIRMATION MESSAGE
-					if(isset($_POST['discount_amnt']))
-					{
-						if(@$getDiscount > 0) {
-							echo '
-							<div class="alert alert-success alert-dismissible fade show" role="alert">
-								<strong>Congratulation!</strong> You have get BDT '. @$_SESSION['SSCF_DISCOUNT_AMOUNT'] .' tk discount.
-								<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
-							</div>';
-						} 
-						else 
-						{
-							echo '
-							<div class="alert alert-danger alert-dismissible fade show" role="alert">
-								<strong>Be Careful</strong> and don\'t try to become a fruad...!
-								<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
-							</div>';
+							echo '<div class="alert alert-danger">We couldnt remove it. Make sure theres no error or contact us</div>';
 						}
 					}
 				?>
@@ -155,13 +89,13 @@ $deliveryCharge = $eloquent->selectData($columnName, $tableName, @$whereValue);
 					<table class="table table-cart">
 						<thead>
 							<tr>
-								<th class="product-col">المنتج</th>
-								<th class="price-col">السعر</th>
-								<th class="qty-col">العدد</th>
-								<th class="price-col">السعر الكلي</th>
-								<th class="size-col">الحجم</th> <!-- Added Size Header -->
-                                <th class="color-col">اللون</th> <!-- Added Color Header -->
-								<th >تعديل</th>
+								<th class="product-col">Product</th>
+								<th class="price-col">Price</th>
+								<th class="qty-col">Quantity</th>
+								<th class="price-col">Total Price</th>
+								<th class="size-col">Size</th> <!-- Added Size Header -->
+                                <th class="color-col">Color</th> <!-- Added Color Header -->
+								<th >Update Changes</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -177,11 +111,7 @@ $deliveryCharge = $eloquent->selectData($columnName, $tableName, @$whereValue);
                                 if (!in_array($productId, $displayedProducts)) {
                                     $displayedProducts[] = $productId;
 									$image = $eachCartItems['image_name'];
-									if ($eachCartItems["id"] < 142) {
-									{
-										$image =  $GLOBALS['PRODUCT_DIRECTORY'] . $eachCartItems['image_name'];
-									}
-									}
+									
 									echo '
 									<form method="post" action="">
 										<tr class="product-row">
@@ -205,9 +135,9 @@ $deliveryCharge = $eloquent->selectData($columnName, $tableName, @$whereValue);
 											<td class="bb">
 												<div class="d-flex checkout-steps-action">
 													<input type="hidden" name="cart_id" value=" ' . $eachCartItems['id'] . ' " />
-													<button name="update_cart" type="submit" class="btn btn-sm btn-outline-info">تحديث التغير</button> &nbsp;
+													<button name="update_cart" type="submit" class="btn btn-sm btn-outline-info">Update التغير</button> &nbsp;
 													<input type="hidden" name="remove_id" value=" ' . $eachCartItems['id'] . ' " />
-													<button name="remove_cart" type="submit" class="btn btn-sm btn-outline-danger">مسح المنتج</button>
+													<button name="remove_cart" type="submit" class="btn btn-sm btn-outline-danger">Remove Product</button>
 												</div>
 											</td>
 										</tr>
@@ -222,7 +152,7 @@ $deliveryCharge = $eloquent->selectData($columnName, $tableName, @$whereValue);
 							<tr>
 								<td colspan="8" class="clearfix">
 									<div class="float-left">
-										<a href="index.php" class="btn btn-outline-success">ارجع لتستمر في التسوق</a>
+										<a href="index.php" class="btn btn-outline-success">Return to continue shopping</a>
 									</div>
 								</td>
 							</tr>                    
@@ -234,11 +164,11 @@ $deliveryCharge = $eloquent->selectData($columnName, $tableName, @$whereValue);
 
 			<div class="col-lg-4">
 				<div class="cart-summary">
-					<h3>الحساب</h3>
+					<h3>Account</h3>
 					<table class="table table-totals">
 						<tbody>
 							<tr>
-								<td>سعر المنتجات</td>
+								<td>Product Price</td>
 								<td>
 									
 									<?php 
@@ -257,32 +187,19 @@ $deliveryCharge = $eloquent->selectData($columnName, $tableName, @$whereValue);
 								<?php $GLOBALS['TAX'] = 0 ; ?>
 						
 							<tr>
-								<td>سعر الشحن </td>
+								<td>Shipping Price </td>
 								<td>
 									<?= $GLOBALS['CURRENCY'] . " "; ?>
-									<span id="charge">
-										
-										<?php 
-											if(@$fobCost <= 0)
-											{
-												echo 0;
-											}
-											else 
-											{
-												echo @$fobCost; 
-											}
-										?>
-										
-									</span>
+									<span id="charge">40</span>
 								</td>
 							</tr>								
 							<?php @$_SESSION['SSCF_DISCOUNT_AMOUNT'] = 0 ;?>
 						</tbody>
 						<tfoot>
 							<tr>
-								<td>السعر الكامل</td>
+								<td>total Price</td>
 								<td>
-									<?= $GLOBALS['CURRENCY'] . " " . $grandTotal = round((($cartSubtotal ) - @$_SESSION['SSCF_DISCOUNT_AMOUNT']) + $fobCost); ?>
+									<?= $GLOBALS['CURRENCY'] . " " . $grandTotal = round((($cartSubtotal ) - @$_SESSION['SSCF_DISCOUNT_AMOUNT'])); ?>
 								</td>
 							</tr>
 						</tfoot>
@@ -293,21 +210,13 @@ $deliveryCharge = $eloquent->selectData($columnName, $tableName, @$whereValue);
 						</div>
 					</span>
 					<div class="checkout-methods">
-						
-						<?php
-							if(!empty(@$fobCost))
-							{
-						?>
-							
+
 						<form action="order.php" method="post">
-								
-						<?php 
-							}
-						?>
+
 							<input type="hidden" name="cartsub_total" value="<?php echo $cartSubtotal; ?>">
 							<input type="hidden" name="tax_total" value="<?php echo $tax; ?>">
 							<input type="hidden" name="discount_amount" value="<?php echo @$_SESSION['SSCF_DISCOUNT_AMOUNT']; ?>">
-							<input type="hidden" name="delivery_charge" value="<?php echo @$fobCost; ?>">
+							<input type="hidden" name="delivery_charge" value="40">
 							<input type="hidden" name="grand_total" value="<?php echo $grandTotal; ?>">
 							<button name="submit_order" id="fEvent" class="btn btn-block btn-sm btn-primary">اكمل للشراء</button>
 						</form>

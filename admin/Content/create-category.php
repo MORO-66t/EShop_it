@@ -1,10 +1,8 @@
 <?php
-## ===*=== [C]ALLING CONTROLLER ===*=== ##
-include(" Controller.php");
-include("app/Models/Eloquent.php");
+include("Eloquent.php");
 
 
-## ===*=== [O]BJECT DEFINED ===*=== ##
+
 $eloquent = new Eloquent;
 
 

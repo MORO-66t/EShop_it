@@ -1,11 +1,11 @@
 <?php
-### INCLUDE VIEW CLASS
-include(" View.php");
 
-## [O]bject Defined 
+include("View.php");
+
+
 $view = new View;
 
-## [M]ethod Execute | VIEW CLASS
+
 $view->loadContent("include", "session");
 $view->loadContent("include", "top");
 $view->loadContent("content", "create-product");

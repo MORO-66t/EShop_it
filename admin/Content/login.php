@@ -1,64 +1,29 @@
 <?php
-## ===*=== [C]ALLING CONTROLLER ===*=== ##
-include(" Controller.php");
-include(" AdminController.php");
+include_once("Eloquent.php");
+
+$eloquent = new Eloquent;
 
 
-## ===*=== [O]BJECT DEFINED ===*===  ##
-$adminCtrl = new AdminController;
-
-if(isset($_POST['try_login']))
-{echo '<h1> NOT NO </h1>';
-	#== LOGIN FORM INPUT FIELD
-	$username = $_POST['username'];
-	$password = sha1($_POST['password']);
-
-	echo $username;
-	echo $password;
-	#== CHECK VALUES WHICH USER PASSES THE DATA
-	$adminData = $adminCtrl->tryLogin( $username, $password );
-	
-	if(!empty($adminData))
+if( isset($_POST['try_login']) )
+{
+	$columnName = "*";
+	$tableName = "admins";
+	$whereValue["admin_email"] = $_POST['username'];
+	$whereValue["admin_password"] = sha1($_POST['password']);
+	$userLogin = $eloquent->selectData($columnName, $tableName, @$whereValue);
+	if(!empty($userLogin))
 	{
-		#== CREATE LOGGED IN USER SESSION FOR USAGE ENTRIE APPLICATION IN FURTHER WHERE NEEDED
-		$_SESSION['SMC_login_time'] = date("Y-m-d H:i:s");
+ 		$_SESSION['SMC_login_time'] = date("Y-m-d H:i:s");
 		$_SESSION['SMC_login_id'] = $adminData[0]['id'];
 		$_SESSION['SMC_login_admin_name'] = $adminData[0]['admin_name'];
 		$_SESSION['SMC_login_admin_email'] = $adminData[0]['admin_email'];
 		$_SESSION['SMC_login_admin_image'] = $adminData[0]['admin_image'];
 		$_SESSION['SMC_login_admin_status'] = $adminData[0]['admin_status'];
-		$_SESSION['SMC_login_admin_type'] = $adminData[0]['admin_type'];
-		
-		#== IF USER ID AND PASSWORD IS VALID THEN REDIRECT TO THE DASHBOARD PAGE 
-		header("Location: dashboard.php");
+		$_SESSION['SMC_login_admin_type'] = "Root Admin";
+
+		echo '<meta http-equiv="Refresh" content="0; url=list-category.php" />';
 	}
 }
-## ===*=== [L]OGIN ACCESS ===*=== ##
-if(isset($_POST['try_login']))
-{echo '<h1> NOT NO </h1>';
-	#== LOGIN FORM INPUT FIELD
-	$username = $_POST['username'];
-	$password = sha1($_POST['password']);
-	
-	#== CHECK VALUES WHICH USER PASSES THE DATA
-	$adminData = $adminCtrl->tryLogin( $username, $password );
-	
-	if(!empty($adminData))
-	{
-		#== CREATE LOGGED IN USER SESSION FOR USAGE ENTRIE APPLICATION IN FURTHER WHERE NEEDED
-		$_SESSION['SMC_login_time'] = date("Y-m-d H:i:s");
-		$_SESSION['SMC_login_id'] = $adminData[0]['id'];
-		$_SESSION['SMC_login_admin_name'] = $adminData[0]['admin_name'];
-		$_SESSION['SMC_login_admin_email'] = $adminData[0]['admin_email'];
-		$_SESSION['SMC_login_admin_image'] = $adminData[0]['admin_image'];
-		$_SESSION['SMC_login_admin_status'] = $adminData[0]['admin_status'];
-		$_SESSION['SMC_login_admin_type'] = $adminData[0]['admin_type'];
-		
-		#== IF USER ID AND PASSWORD IS VALID THEN REDIRECT TO THE DASHBOARD PAGE 
-		header("Location: dashboard.php");
-	}
-} 
-## ===*=== [L]OGIN ACCESS ===*=== ##
 ?>
 
 <!DOCTYPE html>
@@ -67,28 +32,12 @@ if(isset($_POST['try_login']))
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 		<meta name="description" content="Back End Development">
-		<meta name="author" content="Md. Abdullah Al Mamun Roni">
+		<meta name="author" content="Mohammed Raga">
 		
 		<title>Admin Login | SuperShop</title>
+		<link href="assets/css/style.css" rel="stylesheet">
+		<link href="assets/css/style-responsive.css" rel="stylesheet">
 		
-		<!--=*= CSS FILES SOURCE START =*=-->
-		<link rel="shortcut icon" href="../public/assets/images/favicon/faviconBackEnd.png" type="image/png">
-		<link href="public/css/style.css" rel="stylesheet">
-		<link href="public/css/style-responsive.css" rel="stylesheet">
-		<!--=*= CSS FILES SOURCE END =*=-->
-		
-		<!--=*= DISABLE IMAGE DRAG PROPERTIES =*=-->
-		<style>
-			img {
-				-moz-user-select: none;
-				-webkit-user-select: none;
-				-ms-user-select: none;
-				user-select: none;
-				-webkit-user-drag: none;
-				user-drag: none;
-				-webkit-touch-callout: none;
-			}
-		</style>
 		<!--=*= DISABLE IMAGE DRAG PROPERTIES =*=-->
 	</head>
 	
@@ -111,9 +60,9 @@ if(isset($_POST['try_login']))
 		</div>	
 		
 		<!--=*= JS FILES SOURCE START =*=-->
-		<script src="./public/js/jquery-3.5.1.min.js"></script>
-		<script src="./public/js/bootstrap.min.js"></script>
-		<script src="./public/js/modernizr.min.js"></script>
+		<script src=".assets/js/jquery-3.5.1.min.js"></script>
+		<script src=".assets/js/bootstrap.min.js"></script>
+		<script src=".assets/js/modernizr.min.js"></script>
 		<!--=*= JS FILES SOURCE END =*=-->
 		
 	</body>

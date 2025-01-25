@@ -9,7 +9,7 @@ if(isset($_REQUEST['id']))
 
 $columnName = $tableName = $whereValue = $inColumn = $inValue = $formatBy = $paginate = null;
 $columnName = "*";
-$tableName = "product_images"; // [CHANGED] Updated table name from 'product_master_image' to 'product_images'
+$tableName = "product_images";
 $whereValue["product_id"] = $_SESSION['SSCF_product_product_id'];
 $imagesResult = $eloquent->selectData($columnName, $tableName, @$whereValue, @$inColumn, @$inValue, @$formatBy, @$paginate);
 
@@ -33,7 +33,7 @@ $tableName["1"] = "categories";
 $tableName["2"] = "subcategories";
 $onCondition["1"] = ["categories.id", "products.category_id"];
 $onCondition["2"] = ["subcategories.id", "products.subcategory_id"];
-$whereValue["products.id"] = $_SESSION['SSCF_product_product_id'];
+$whereValue["products.id"] = $_SESSION[''];
 $breadcrumbName = $eloquent->selectJoinData($columnName, $tableName, $joinType, $onCondition, @$whereValue, @$formatBy);
 ?>
 
@@ -77,10 +77,11 @@ $breadcrumbName = $eloquent->selectJoinData($columnName, $tableName, $joinType, 
                                 <?php
                                 echo '
                                 <div class="col-3 owl-dot">
-                                    <img src="'. $imagesResult[0]['image_name'] .'"/>
+                                    <img src="'. $imagesResult[1]['image_name'] .'"/>
                                 </div>										
                                 ';
-                                foreach($imagesResult as $eachImage) // [CHANGED] Loop through imagesResult to display image thumbnails
+                                // print_r($imagesResult);
+                                foreach($imagesResult as $eachImage) 
                                 {
                                     $image = $eachImage['image_name'];
                                     echo '
@@ -118,7 +119,7 @@ $breadcrumbName = $eloquent->selectJoinData($columnName, $tableName, $joinType, 
                                 <?php
                 foreach ($productResult as $eachImage) {
                     $colorString = $eachImage['color'];
-                    $sizeString = $eachImage['size']; // Assuming the size is stored similarly to color
+                    $sizeString = $eachImage['size'];
                 
                     // Process colors
                     if (!empty($colorString)) {
@@ -132,7 +133,7 @@ $breadcrumbName = $eloquent->selectJoinData($columnName, $tableName, $joinType, 
                         echo '<div class="d-flex mb-4 "  style="
                     margin-bottom: 0px !important;
                 ">
-                <p class="text-dark font-weight-medium mb-0 mr-3">الالوان:</p>
+                <p class="text-dark font-weight-medium mb-0 mr-3">Colors:</p>
                 <form id="cart-form">';
         
         foreach ($colorArray as $index => $color) {
@@ -158,7 +159,7 @@ $breadcrumbName = $eloquent->selectJoinData($columnName, $tableName, $joinType, 
         echo '<div class="d-flex mb-4" style="
     margin-bottom: 0px !important;
 ">
-                <p class="text-dark font-weight-medium mb-0 mr-3">المقاسات:</p>
+                <p class="text-dark font-weight-medium mb-0 mr-3">Sizes:</p>
                 <form>';
         
         foreach ($sizeArray as $index => $size) {
@@ -176,16 +177,16 @@ $breadcrumbName = $eloquent->selectJoinData($columnName, $tableName, $joinType, 
 echo '<div class="product-action product-all-icons">
         <div class="d-flex d-block d-inline">
             <div class="product-single-qty">
-            <span> محتاج كام عدد ؟</span>
+            <span> How many do you need?</span>
                 <input id="quantity-input" class="horizontal-quantity form-control" type="number" value="1" min="1" />
             </div>
             <form method="post" action="" id="cart-form" onsubmit="updateFormData()">
-                <input type="hidden" name="cart_product_id" value="' . $_SESSION['SSCF_product_product_id'] . '" />
+                <input type="hidden" name="cart_product_id" value="' . $_SESSION[''] . '" />
                 <input type="hidden" id="hidden-quantity" name="cart_product_quantity" value="1" />
                 <input type="hidden" id="hidden-color" name="cart_product_color" value="" />
                 <input type="hidden" id="hidden-size" name="cart_product_size" value="" />
                 <button type="submit" name="add_to_cart" class="paction add-cart" title="Add to Cart" style="margin-left: 7px; padding-top: 6px;">
-                    <span>اضف الي السلة</span>
+                    <span>Add to the cart</span>
                 </button>
             </form>
         </div>

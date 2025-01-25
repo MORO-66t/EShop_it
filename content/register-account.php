@@ -95,7 +95,7 @@ if(isset($_POST['userRegistration']))
 						</div>					
 					</div>	
 					<div class="form-group required-field">
-						<label for="acc-email" class="font-weight-bold text-dark text-2">العنوان</label>
+						<label for="acc-email" class="font-weight-bold text-dark text-2">address</label>
 						<input type="text" class="form-control" name="acc_address" placeholder="type your address please..." required>
 					</div>					
 					<div class="mb-2">
@@ -111,7 +111,7 @@ if(isset($_POST['userRegistration']))
 			</div>
 			<aside class="sidebar col-lg-3">
 				<div class="widget widget-dashboard">
-					<h3 class="widget-title">حسابي</h3>
+					<h3 class="widget-title">My Account</h3>
 					<ul class="list">
 						<li><a href="dashboard.php"> dashboard</a></li>
 						<li class="active"><a href="register-account.php"> register new account  </a></li>

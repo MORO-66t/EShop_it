@@ -1,31 +1,5 @@
 <?php
-## ===*=== [C]ALLING CONTROLLER ===*=== ##
-include(" Controller.php");
-include(" HomeController.php");
-include(" SSLCommerz.php");
-
-
-## ===*=== [O]BJECT DEFINED ===*=== ##
 $eloquent = new Eloquent;
-
-
-## ===*=== [U]PDATE SHIPPING DETAILS DATA ===*=== ##
-// if(isset($_POST['update_shipping']))
-// { 
-// 	$tableName = $columnValue = $whereValue =  null;
-// 	$tableName = "shippings";
-// 	$columnValue["shipcstmr_name"] = $_POST['shipcstmr_name_upd'];
-// 	$columnValue["shipcstmr_mobile"] = $_POST['shipadd_phn_upd'];
-// 	$columnValue["shipcstmr_profession"] = $_POST['shipadd_prfsion_upd'];
-// 	$columnValue["shipcstmr_streetadd"] = $_POST['shipcstmr_streetadd_upd'];
-// 	$columnValue["shipcstmr_city"] = $_POST['shipcstmr_city_upd'];
-// 	$columnValue["shipcstmr_zip"] = $_POST['shipadd_zopc_upd'] = 0;
-// 	$columnValue["shipcstmr_country"] = $_POST['shipadd_cntry_upd'];
-// 	$columnValue["updated_at"] = date("Y-m-d H:i:s");
-// 	$whereValue["id"] = $_SESSION['SSC_last_shipadd_id'];
-// 	$updateResult = $eloquent->updateData($tableName, $columnValue, @$whereValue);	
-// }
-## ===*=== [U]PDATE SHIPPING DETAILS DATA ===*=== ##
 
 
 ## ===*=== [I]NSERT TO THE SHIPPING DATA ===*=== ##
@@ -66,27 +40,11 @@ if(isset($_POST['proceed_to_payment']) )
 	$orderDetailsToPay = $eloquent->selectData($columnName, $tableName, $whereValue);
 	
 	$_SESSION['SSCF_orders_grand_total'] = $orderDetailsToPay[0]['grand_total'];
-
-	#== [I]NTEGRATE PAYMENT GATEWAY START
-	if ($_SERVER['SERVER_NAME'] == "localhost") 
-	{
-		$server_name = 'http://localhost/www.supershop.com/';
-	} 
-	else 
-	{
-		$server_name = 'http://www.supershop.com/';
-	}
-	
-	##=*= ALL CUSTOMER DATA THAT YOU REQUIRE TO SEND TO PAYMENT GATEWAY =*=##
-	#== [P]AYMENT INFORMATION | REQUIRED
 	$post_data = array();
 	$post_data['total_amount'] = $orderDetailsToPay[0]['grand_total'];
 	$post_data['currency'] = "ج.م";
 	$post_data['tran_id'] = $orderDetailsToPay[0]['id'];
-	$post_data['success_url'] = $server_name . "status.php";	#== SUCCESS CONFIRMATION PAGE
-	$post_data['fail_url'] = $server_name . "status.php";		#== FAILED CONFIRMATION PAGE
-	$post_data['cancel_url'] = $server_name . "status.php";		#== CANCELLED CONFIRMATION PAGE
-	
+
 	#== [C]USTOMER INFORMATION | REQUIRED
 	$post_data['cus_name'] = $_SESSION['SSCF_login_user_name'];
 	$post_data['cus_email'] = $_SESSION['SSCF_login_user_email'];
@@ -139,16 +97,16 @@ $_SESSION['SSCF_ship_cstmr_city'] = $shipcstmResult[0]['shipcstmr_city'];
 $_SESSION['SSCF_ship_cstmr_zip'] = $shipcstmResult[0]['shipcstmr_zip'];
 $_SESSION['SSCF_ship_cstmr_cntry'] = $shipcstmResult[0]['shipcstmr_country'];
 ## ===*=== [F]ETCH SHIPPING DATA ===*=== ##
-include_once(" Controller.php");
-include_once(" HomeController.php");
-include_once(" SSLCommerz.php");
-include_once(" InvoiceValue.php");
+// include_once(" Controller.php");
+// include_once(" HomeController.php");
+// include_once(" SSLCommerz.php");
+// include_once(" InvoiceValue.php");
 
 
-## ===*=== [O]BJECT DEFINED ===*=== ##
-$sslc = new SSLCommerz();
+
+// $sslc = new SSLCommerz();
 $eloquent = new Eloquent;
-$getAmount = new InvoiceValue;
+// $getAmount = new InvoiceValue;
 
 
 ################### PAYMENT VERIFICATION ###################
@@ -157,46 +115,9 @@ $tran_id = $_SESSION['payment_values']['tran_id'];
 $amount = $_SESSION['payment_values']['amount'];
 $currency = $_SESSION['payment_values']['currency'];
 $fetch_data = $_POST;
-$validation = $sslc->orderValidate($tran_id, $amount, $currency, $fetch_data);
+// $validation = $sslc->orderValidate($tran_id, $amount, $currency, $fetch_data);
 $_SESSION['SSCF_transaction_id'] = @$fetch_data['bank_tran_id'];
 ################### PAYMENT VERIFICATION ###################
-
-
-## ===*=== [I]NSERT DATA TO INVOICE TABLE FOR SSL-COMMERZ ===*=== ##
-if($validation > 0)
-{
-	#== INSERT INVOICE TABLE DATA
-	$tableName = $columnValue = null;
-	$tableName = "invoices";
-	$columnValue["invoice_id"] = @$fetch_data['val_id'];
-	$columnValue["customer_id"] = @$_SESSION['SSCF_login_id'];
-	$columnValue["shipping_id"] = @$_SESSION['SSCF_ship_cstmr_id'];
-	$columnValue["order_id"] = @$fetch_data['tran_id'];
-	$columnValue["transaction_amount"] = @$fetch_data['amount'];
-	$columnValue["created_at"] = date("Y-m-d H:i:s");
-	$invoicePG = $eloquent->insertData($tableName, $columnValue);
-	
-	if($invoicePG['LAST_INSERT_ID'] > 0)
-	{
-		#== FETCH INOVICE DATA FOR SSLCOMERZ INVOICE ID
-		$columnName = $tableName = $whereValue =  null;
-		$columnName = "*";
-		$tableName = "invoices";
-		$whereValue['id'] = $invoicePG['LAST_INSERT_ID'];
-		$invoiceresultPG = $eloquent->selectData($columnName, $tableName, $whereValue);
-		
-		#== UPDATE ORDERS DATA
-		$tableName = $columnValue = $whereValue =  null;
-		$tableName = "orders";
-		$columnValue["payment_method"] = "SSL COMMERZ";
-		$columnValue["transaction_id"] = $fetch_data['bank_tran_id'];
-		$columnValue["transaction_status"] = "Paid";
-		$whereValue["id"] = $_SESSION['SSCF_orders_order_id'];
-		$ordersUpdate = $eloquent->updateData($tableName, $columnValue, @$whereValue);
-	}
-}
-## ===*=== [I]NSERT DATA TO INVOICE TABLE FOR SSL-COMMERZ ===*=== ##
-
 
 ## ===*=== [I]NSERT DATA TO INVOICE TABLE FOR ////CASH ON DELIVERY/// ===*=== ##
 if(True)
@@ -277,14 +198,6 @@ $whereValue["id"] = $_SESSION['SSCF_login_id'];
 $customerResult = $eloquent->selectData($columnName, $tableName, $whereValue);
 ## ===*=== [F]ETCH CUSTOMER DATA WHO IS CONFIRMED PRODUCT'S ORDER ===*=== ##
 
-
-## ===*=== [F]ETCH SHIPPINGS DATA FOR INVOICE DETAILS ===*=== ##
-$tableName = $whereValue= null;
-$columnName = "*";
-$tableName = "invoices";
-$whereValue['customer_id'] = $_SESSION['SSCF_login_id'];
-$invoiceDetails = $eloquent->selectData($columnName, $tableName, $whereValue);
-## ===*=== [F]ETCH SHIPPINGS DATA FOR INVOICE DETAILS ===*=== ##
 ?>
 ?>
 
@@ -301,8 +214,8 @@ $invoiceDetails = $eloquent->selectData($columnName, $tableName, $whereValue);
 			<nav aria-label="breadcrumb" class="breadcrumb-nav mb-2 printClose">
 				<div class="container">
 					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a href="index.php">الرئيسية</a></li>
-						<li class="breadcrumb-item active" aria-current="page">الفاتورة</li>
+						<li class="breadcrumb-item"><a href="index.php">Home</a></li>
+						<li class="breadcrumb-item active" aria-current="page">invoice</li>
 					</ol>
 				</div>
 			</nav>
@@ -315,7 +228,7 @@ $invoiceDetails = $eloquent->selectData($columnName, $tableName, $whereValue);
 				</ul>
 				</div>
 				<div class="text-right">
-					<button type="submit" onclick="print_current_page()" target="_blank" class="btn btn-sm btn-outline-warning printClose">&#128438; اطبع الفاتورة</button>
+					<button type="submit" onclick="print_current_page()" target="_blank" class="btn btn-sm btn-outline-warning printClose">&#128438; Print the invoice</button>
 				</div>
 				<br/>
 				<div class="row">
@@ -367,13 +280,13 @@ $invoiceDetails = $eloquent->selectData($columnName, $tableName, $whereValue);
 									<div class="col-md-8 col-sm-7"><= $invoiceresultCOD[0]['invoice_id'];?></div>
 								</div> -->
 								<div class="row">
-									<div class="col-md-4 col-sm-5 inv-label">وقت الطلب</div>
+									<div class="col-md-4 col-sm-5 inv-label">Order Time</div>
 									<div class="col-md-8 col-sm-7"><?= date("M-d-Y H:i:s A");?></div>
 								</div>
 								<br>
 								<div class="row">
 									<div class="col-md-12 inv-label">
-										<h3 class="inv-label">السعر الاجمالي</h3>
+										<h3 class="inv-label">Total Price</h3>
 										<h2 style="font-size: 40px; font-weight: bold">
 											<?= $GLOBALS['CURRENCY'] . " " . @$getdetailsResult[0]['grand_total']; ?>
 										</h2>
@@ -385,10 +298,10 @@ $invoiceDetails = $eloquent->selectData($columnName, $tableName, $whereValue);
 							<thead>
 								<tr>
 									<th>#</th>
-									<th>وصف المنتج</th>
-									<th class="text-center">سعر الواحده</th>
-									<th class="text-center">العدد</th>
-									<th class="text-center">السعر الكلي</th>
+									<th>Product Description</th>
+									<th class="text-center">Unit Price</th>
+									<th class="text-center">Quantity</th>
+									<th class="text-center">Total Price</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -416,14 +329,14 @@ $invoiceDetails = $eloquent->selectData($columnName, $tableName, $whereValue);
 						</table>
 						<div class="row">
 							<div class="col-md-8 col-xs-7 payment-method">
-							<h3>+ سعر الشحن : <?= $GLOBALS['CURRENCY'] . "40 " ?></h3>
+							<h3>+ Shipping Price : <?= $GLOBALS['CURRENCY'] . "40 " ?></h3>
 								<strong> </strong>
-								<h3 class="inv-label itatic">شكرا علي ثقتك بنا 😘</h3>
+								<h3 class="inv-label itatic">Thank you for trusting us 😘</h3>
 							</div>
 							<div class="col-md-4 col-xs-5 invoice-block pull-right">
 								<ul class="unstyled amounts">
 									
-									<li class="grand-total">السعر الاجمالي : 
+									<li class="grand-total">Total Price : 
 										<?php echo $GLOBALS['CURRENCY'] . " " . $getdetailsResult[0]['grand_total']; ?>
 									</li>
 								</ul>
@@ -434,7 +347,7 @@ $invoiceDetails = $eloquent->selectData($columnName, $tableName, $whereValue);
 				<div class="row">
 					<div class="col-lg-12">
 						<div class="checkout-steps-action">
-							<a href="index.php" class="btn btn-outline-success float-right printClose">اشحن الطلب الان</a>
+							<a href="index.php" class="btn btn-outline-success float-right printClose">Ship the order now</a>
 						</div>
 					</div>
 				</div>

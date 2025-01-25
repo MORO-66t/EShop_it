@@ -59,13 +59,6 @@ if(!empty($categoryDetails))
 	}
 }
 
-$columnName = $tableName = $whereValue = $inColumn = $inValue = $formatBy = $paginate = null;
-$columnName = "*";
-$tableName = "product_images"; 
-$whereValue["product_id"] = $_SESSION['SSCF_product_product_id'];
-$imagesResult = $eloquent->selectData($columnName, $tableName, @$whereValue, @$inColumn, @$inValue, @$formatBy, @$paginate);
-
-
 
 $columnName= $tableName= $whereValue= null;
 $columnName["1"] = "categories.id";
@@ -105,16 +98,6 @@ $categoryResult = $eloquent->selectJoinData($columnName, $tableName, $joinType, 
 			</nav>
 			<div class="row products-body">
 				<div class="col-lg-9 main-content">
-					
-					<?php
-						if(empty($categoryDetails))
-						{
-							echo "<div class='d-flex justify-content-center'>
-										<img src='public/assets/images/sorry.png' style='width: auto; height:400px;'/>
-									</div>";
-						}
-					?>
-					
 					<div class="row row-sm category-grid">
 						 <?php
 							if(!empty($categoryDetails))
@@ -128,8 +111,6 @@ $categoryResult = $eloquent->selectJoinData($columnName, $tableName, $joinType, 
 									$paginate["POINT"] = 0;
 									$paginate["LIMIT"] = 1;
 									$its_photo = $eloquent->selectData($columnName, $tableName, @$whereValue, @$inColumn, @$inValue, @$formatBy, @$paginate);
-									// echo print_r($its_photo);
-									# ASSIGN A NEW VARIABLE IF PRODUCT IMAGE IS NOT UNAVAILABLE
 									if(empty($its_photo[0]['image_name']))
 									{
 										$productImage = "<img src='public/assets/images/no-product-found.png'>";
@@ -148,7 +129,7 @@ $categoryResult = $eloquent->selectJoinData($columnName, $tableName, $joinType, 
 												<a href="product.php?id='.$eachCategory['id'].'" class="categoryflexgrid-image">
 													<img src="'. $productImage .'" alt="product">
 												</a>
-												<a href="ajax/product-quick-view.html" class="btn-quickview">تفاصيل اكثر</a>
+												<a href="ajax/product-quick-view.html" class="btn-quickview">More details</a>
 											</figure>
 											<div class="product-details">
 												<div class="ratings-container">
@@ -170,7 +151,7 @@ $categoryResult = $eloquent->selectJoinData($columnName, $tableName, $joinType, 
 														<input type="hidden" id="hidden-color" name="cart_product_color" value="" />
                 <input type="hidden" id="hidden-size" name="cart_product_size" value="" />
 														<input type="hidden" name="cart_product_quantity" value="1"/>
-														<button type="submit" name="add_to_cart" class="paction add-cart" title="اضف الي السلة " style="margin-left: 7px; padding-top: 6px;">
+														<button type="submit" name="add_to_cart" class="paction add-cart" title="Add to the cart " style="margin-left: 7px; padding-top: 6px;">
 															<span>Add to Cart</span>
 														</button>
 														<button href="#" class="paction add-compare" title="Add to Compare">
@@ -208,7 +189,7 @@ $categoryResult = $eloquent->selectJoinData($columnName, $tableName, $joinType, 
 								<li class="page-item">
 									
 									<a class="page-link page-link-btn" href="category.php?page=<?= $previous ?>">
-										<span class="page-link"><i class="icon-angle-left"></i> السابق &nbsp;</span>
+										<span class="page-link"><i class="icon-angle-left"></i> Previous &nbsp;</span>
 									</a>
 								</li>
 								
@@ -219,7 +200,7 @@ $categoryResult = $eloquent->selectJoinData($columnName, $tableName, $joinType, 
 								
 								<li class="page-item">
 									<a class="page-link page-link-btn" href="category.php?page=<?= $next ?>">
-										<span class="page-link">&nbsp;التالي <i class="icon-angle-right"></i></span>
+										<span class="page-link">&nbsp;Next <i class="icon-angle-right"></i></span>
 									</a>
 								</li>
 							</ul>

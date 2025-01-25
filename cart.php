@@ -1,10 +1,11 @@
 <?php
 
-include(" View.php");
+include("View.php");
 
 $view = new View;
 
 $view->loadContent("include", "session");
- include("top.php")
+$view->loadContent("include", "top");
 $view->loadContent("content", "cart");
- 
+$view->loadContent("include", "tail");
+

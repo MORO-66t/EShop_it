@@ -1,9 +1,9 @@
 <?php
 ## ===*=== [C]ALLING CONTROLLER ===*=== ##
-include("app/Models/Eloquent.php");
+include("Eloquent.php");
 
 
-## ===*=== [O]BJECT DEFINED ===*=== ##
+
 $eloquent = new Eloquent;
 
 

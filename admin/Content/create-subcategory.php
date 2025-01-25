@@ -1,11 +1,5 @@
 <?php
-## ===*=== [C]ALLING CONTROLLER ===*=== ##
-include(" Controller.php");
-include("app/Models/Eloquent.php");
-
-
-## ===*=== [O]BJECT DEFINED ===*=== ##
-$control = new Controller;
+include("Eloquent.php");
 $eloquent = new Eloquent;
 
 
@@ -20,27 +14,14 @@ $categoryList = $eloquent->selectData($columnName, $tableName);
 ## ===*=== [I]NSERT SUBCATEGORY DATA ===*=== ##
 if (isset($_POST['create_subcategory'])) 
 {
-	#== IMAGE FILE VALIDATION
-	if( $control->checkImage(@$_FILES['subcategory_banner']['type'], @$_FILES['subcategory_banner']['size'], @$_FILES['subcategory_banner']['error']) == 1)
-	{
-		#== NEW IMAGE FILE NAME GENERATE
-		$filename = "SUBCATBANNER_" . date("YmdHis") . "_" . $_FILES['subcategory_banner']['name'];
-		
 		$tableName = $columnValue = null;
 		$tableName = "subcategories";
 		$columnValue["subcategory_name"] = $_POST['subcategory_name'];
 		$columnValue["category_id"] = $_POST['category_id'];
 		$columnValue["subcategory_status"] = $_POST['subcategory_status'];
-		$columnValue["subcategory_banner"] = $filename;
+		$columnValue["subcategory_banner"] = '';
 		$columnValue["created_at"] = date("Y-m-d H:i:s");
 		$createSubcategory = $eloquent->insertData($tableName, $columnValue);
-		
-		if($createSubcategory > 0)
-		{
-			#== ADD IMAGE TO THE DIRECTORY
-			move_uploaded_file($_FILES['subcategory_banner']['tmp_name'], $GLOBALS['BANNER_DIRECTORY'] . $filename);
-		}
-	}
 }
 ## ===*=== [I]NSERT SUBCATEGORY DATA ===*=== ##
 ?>
@@ -106,28 +87,7 @@ if (isset($_POST['create_subcategory']))
 									</select>
 								</div>
 							</div>
-							<div class="form-group">
-								<label for="SubCatBanner" class="control-label col-md-2 "> Sub Category Banner </label>
-								<div class="controls col-md-9">
-									<div class="fileupload fileupload-new" data-provides="fileupload">
-										<span class="btn btn-default btn-file">
-											<input name="subcategory_banner" type="file" class="default" onchange="readURL(this);" set-to="div5" required />
-										</span>
-										<span class="fileupload-preview" style="margin-left:5px;"></span>
-										<a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none; margin-left:5px;"></a>
-									</div>
-								</div>
-							</div>
-							<div class="form-group last">
-								<label for="BannerPreview" class="control-label col-md-2"> Sub Category Preview </label>
-								<div class="col-md-9">
-									<div class="fileupload fileupload-new" data-provides="fileupload">
-										<div class="fileupload-new thumbnail" style="width: 400px; height: 200px;">
-											<img src="http://www.placehold.it/400x200/EFEFEF/AAAAAA&amp;text=no+image" alt="" id="div5" style="width: 100%; height: 100%;"/>
-										</div>
-									</div>
-								</div>
-							</div>
+							
 							<div class="form-group ">
 								<label for="SubCategoryStatus" class="control-label col-lg-2"> Sub-Category Status </label>
 								<div class="col-lg-7">

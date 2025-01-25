@@ -1,11 +1,6 @@
 <?php	
-## ===*=== [C]ALLING CONTROLLER ===*=== ##
-include(" Controller.php");
-include("app/Models/Eloquent.php");
+include("Eloquent.php");
 
-
-## ===*=== [O]BJECT DEFINED ===*=== ##
-$control = new Controller;
 $eloquent = new Eloquent;
 
 
@@ -29,31 +24,15 @@ if(isset($_POST['try_update']))
 	} 
 	else 
 	{
-		#== IF UPDATE WITH SLIDER IMAGE 
-		if( $control->checkImage(@$_FILES['subcategory_banner']['type'], @$_FILES['subcategory_banner']['size'], @$_FILES['subcategory_banner']['error']) == 1)
-		{
-			#== NEW IMAGE FILE NAME GENERATE
-			$filename = "SUBCATBANNER__" . date("YmdHis") . "_" . $_FILES['subcategory_banner']['name'];
-			
 			$tableName = $columnValue = $whereValue = null;
 			$tableName = "subcategories";
 			$columnValue["subcategory_name"] = $_POST['subcategory_name'];
 			$columnValue["category_id"] = $_POST['category_id'];
 			$columnValue["subcategory_status"] = $_POST['subcategory_status'];
-			$columnValue["subcategory_banner"] = $filename;
 			$whereValue["id"] = $_SESSION['SMC_edit_subcategory_id'];
 			$updatesubcategoryData = $eloquent->updateData($tableName, $columnValue, @$whereValue);
-			
-			if($updatesubcategoryData > 0)
-			{
-				#== ADD IMAGE TO THE DIRECTORY
-				move_uploaded_file($_FILES['subcategory_banner']['tmp_name'], $GLOBALS['BANNER_DIRECTORY'] . $filename);
-				
-				#== REMOVE IMAGE FROM THE DIRECTORY
-				unlink($_SESSION['SMC_edit_subcategory_banner_file_old']);
-			}
-		}
-	}		
+
+		}	
 }
 ## ===*=== [U]PDATE SUBCATEGORY DATA ===*=== ##
 
@@ -69,19 +48,14 @@ if(isset($_POST['edit_subcategory_id']))
 $tableName = $columnName = $joinType = $onCondition = $whereValue = null;
 $columnName["1"] = "subcategories.subcategory_name";
 $columnName["2"] = "subcategories.subcategory_status";
-$columnName["3"] = "subcategories.subcategory_banner";
-$columnName["4"] = "subcategories.category_id";
-$columnName["5"] = "subcategories.id";
+$columnName["3"] = "subcategories.category_id";
+$columnName["4"] = "subcategories.id";
 $tableName["MAIN"] = "subcategories";
 $joinType = "INNER";
 $tableName["1"] = "categories";
 $onCondition["1"] = ["subcategories.category_id", "categories.id"];
 $whereValue["subcategories.id"] = $_SESSION['SMC_edit_subcategory_id'];
 $getsubcategoryData = $eloquent->selectJoinData($columnName, $tableName, $joinType, $onCondition, @$whereValue);
-
-#== CREATE A SESSION FOR EXISTING SUBCATEGORY BANNER IMAGE
-$_SESSION['SMC_edit_subcategory_banner_file_old'] = $GLOBALS['BANNER_DIRECTORY'] . $getsubcategoryData[0]['subcategory_banner']; 
-## ===*=== [G]ET EXISTING SUBCATEGORY DATA ===*=== ##
 
 
 ## ===*=== [L]OAD CATEGORY DATA===*=== ##
@@ -156,28 +130,6 @@ $categoryList = $eloquent->selectData($columnName, $tableName);
 										?>
 										
 									</select>
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="SubCatBanner" class="control-label col-md-2 "> Sub Category Banner </label>
-								<div class="controls col-md-9">
-									<div class="fileupload fileupload-new" data-provides="fileupload">
-										<span class="btn btn-default btn-file">
-											<input name="subcategory_banner" type="file" class="default" onchange="readURL(this);" set-to="div6" value="<?= $getsubcategoryData[0]['subcategory_banner'] ?>"/>
-										</span>
-										<span class="fileupload-preview" style="margin-left:5px;"></span>
-										<a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none; margin-left:5px;"></a>
-									</div>
-								</div>
-							</div>
-							<div class="form-group last">
-								<label for="BannerPreview" class="control-label col-md-2"> Sub Category Preview </label>
-								<div class="col-md-9">
-									<div class="fileupload fileupload-new" data-provides="fileupload">
-										<div class="fileupload-new thumbnail" style="width: 400px; height: 200px;">
-											<img src="<?= $GLOBALS['BANNER_DIRECTORY'] . $getsubcategoryData[0]['subcategory_banner'] ?>" alt="" id="div6" style="width: 100%; height: 100%;"/>
-										</div>
-									</div>
 								</div>
 							</div>
 							

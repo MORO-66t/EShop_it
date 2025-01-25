@@ -1,10 +1,5 @@
 <?php
-## ===*=== [C]ALLING CONTROLLER ===*=== ##
-include(" Controller.php");
 
-
-## ===*=== [O]BJECT DEFINED ===*=== ##
-$control = new Controller;
 $eloquent = new Eloquent;
 
 
@@ -46,15 +41,15 @@ if(@$_SESSION['SSCF_login_id'] > 0)
 	<nav aria-label="breadcrumb" class="breadcrumb-nav">
 		<div class="container">
 			<ol class="breadcrumb">
-				<li class="breadcrumb-item"><a href="index.php">الرئيسية</a></li>
-				<li class="breadcrumb-item active" aria-current="page">حسابي</li>
+				<li class="breadcrumb-item"><a href="index.php">Home</a></li>
+				<li class="breadcrumb-item active" aria-current="page">My Account</li>
 			</ol>
 		</div>
 	</nav>	
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-9 order-lg-last dashboard-content">
-				<h2>حسابي</h2>
+				<h2>My Account</h2>
 				
 				<?php
 					#== A GREETING MESSEGE IF USER LOGGED IN
@@ -62,7 +57,7 @@ if(@$_SESSION['SSCF_login_id'] > 0)
 					{
 						echo '
 						<div class="alert alert-success alert-dismissible fade show" role="alert">
-							Hello, <strong>'. @$_SESSION['SSCF_login_user_name'] .'</strong> اهلا بيك في حسابك . يمكنك تغير معلوماتك والاطلاع عليها من هنا
+							Hello, <strong>'. @$_SESSION['SSCF_login_user_name'] .'</strong> Welcome to your account. You can update and view your information here
 							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
@@ -76,7 +71,7 @@ if(@$_SESSION['SSCF_login_id'] > 0)
 						if(@$updatecustomerData > 0)
 						echo '
 						<div class="alert alert-success alert-dismissible fade show" role="alert">
-							Hello, <strong>'. @$_SESSION['SSCF_login_user_name'] .'</strong> تم تحديث معلوماتك بنجاح
+							Hello, <strong>'. @$_SESSION['SSCF_login_user_name'] .'</strong> Your information has been successfully updated.
 							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
@@ -88,12 +83,12 @@ if(@$_SESSION['SSCF_login_id'] > 0)
 				<div class="mb-4">
 					<!--=*= CREATE A EMPTY SPACE BETWEEN CONTENT =*=-->
 				</div>
-				<h3>معلومات الحساب</h3>
+				<h3>Account Information</h3>
 				<div class="row">
 					<div class="col-md-12">
 						<div class="card">
 							<div class="card-header">
-								معلومات التواصل
+								Contact Information
 							</div>
 							<div class="card-body">
 								
@@ -105,43 +100,21 @@ if(@$_SESSION['SSCF_login_id'] > 0)
 									} 
 									else 
 									{
-										echo '<p> You have not create an account. <a href="register-account.php" class="text-info"> <b>تسجيل حساب</b> </a> </p>';
+										echo '<p> You have not create an account. <a href="register-account.php" class="text-info"> <b>Register Account</b> </a> </p>';
 									}
 								?>
 								
 							</div>
 						</div>
 					</div>
-					<!-- <div class="col-md-6">
-						<div class="card">
-							<div class="card-header"> Newsletters </div>
-							<div class="card-body">
-								
-								<php
-									#== NEWSLETTER INFORMATION
-									if(!empty($_SESSION['SMCF_login_user_newsletter'])) //newsletter section work in pending
-									{
-										if(@$_SESSION['SSCF_login_id'] > 0)
-										echo "<p>" . @$_SESSION['SMCF_login_user_newsletter'] . "</p>";
-										else
-										echo '<p> You are currently not subscribed to any newsletter. </p>';
-									}
-									else
-									{
-										echo '<p> You are currently not subscribed to any newsletter. </p>';
-									}
-								?>
-								
-							</div>
-						</div>
-					</div> -->
+					
 				</div>
 				<div class="card">
-					<div class="card-header"> معلومات الحجز</div>
+					<div class="card-header"> Booking Information</div>
 					<div class="card-body">
 						<div class="row">
 							<div class="col-md-6">
-								<h4 class="">عنوان استلام الطلبات</h4>
+								<h4 class="">Delivery Address</h4>
 								
 								<?php 
 									#== REGISTERED CUSTOMER ADDRESS DATA
@@ -154,7 +127,7 @@ if(@$_SESSION['SSCF_login_id'] > 0)
 								
 							</div>
 							<div class="col-md-6">
-								<h4 class="">اخر طلب ليك</h4>
+								<h4 class="">Your Last Order</h4>
 								
 								<?php
 									#== SHIPPING ADDRESS DATA
@@ -206,7 +179,7 @@ if(@$_SESSION['SSCF_login_id'] > 0)
 											<div class="form-group required-field">
 												<input type="text" name="upcstmr_add" class="form-control" value="<?php echo $cstmrDetails[0]['customer_address']; ?>">
 											</div>
-											<button type="submit" name="update_accinfo" class="btn btn-sm btn-outline-info">تحديث</button>
+											<button type="submit" name="update_accinfo" class="btn btn-sm btn-outline-info">Update</button>
 										</div>
 									</div>
 								</form>
@@ -219,29 +192,6 @@ if(@$_SESSION['SSCF_login_id'] > 0)
 					
 				</div>
 			</div>
-			
-			<aside class="sidebar col-lg-3">
-				<div class="widget widget-dashboard">
-					<h3 class="widget-title">حسابي</h3>
-					<ul class="list">
-						<li class="active"><a href="dashboard.php">معلومات الحساب</a></li>
-						<li><a href="register-account.php">تسجيل حساب</a></li>
-						<li><a href="user-password.php">تغير كلمة السر</a></li>
-						<!-- 
-							=*= FOR LATER USED ONLY =*=
-							<li><a href="#">My Orders</a></li>
-							<li><a href="#">Billing Agreements</a></li>
-							<li><a href="#">Recurring Profiles</a></li>
-							<li><a href="#">My Product Reviews</a></li>
-							<li><a href="#">My Tags</a></li>
-							<li><a href="#">My Wishlist</a></li>
-							<li><a href="#">My Applications</a></li>
-							<li><a href="#">Newsletter Subscriptions</a></li>
-							<li><a href="#">My Downloadable Products</a></li>
-						-->
-					</ul>
-					</div>
-				</aside>
 			</div>
 	</div>
 	<div class="mb-5">

@@ -4,5 +4,7 @@ include("View.php");
 
 $view = new View;
 
-include("top.php");
+$view->loadContent("include", "session");
+$view->loadContent("include", "top");
 $view->loadContent("content", "home");
+$view->loadContent("include", "tail");

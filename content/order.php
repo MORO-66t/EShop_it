@@ -1,10 +1,4 @@
 <?php
-## ===*=== [C]ALLING CONTROLLER ===*=== ##
-include(" Controller.php");
-
-
-## ===*=== [O]BJECT DEFINED ===*=== ##
-$control = new Controller;
 $eloquent = new Eloquent;
 
 
@@ -68,40 +62,10 @@ if(isset($_POST['submit_order']))
 			$whereValue["customer_id"] = $_SESSION['SSCF_login_id'];
 			$deleteshopcartData = $eloquent->deleteData($tableName, $whereValue);			
 			
-			$tableName = $whereValue = null;
-			$tableName = "deliveries";
-			$whereValue["customer_id"] = $_SESSION['SSCF_login_id'];
-			$deleteshopcartData = $eloquent->deleteData($tableName, $whereValue);
 		}
 	}
 }
 ## ===*=== [I]NSERT ORDER TABLE'S DATA FROM SHOPCART PAGE ===*=== ##
-
-
-## ===*=== [W]HEN USER TRY TO LOG IN ===*=== ##
-if( isset($_POST['user_login']) )
-{
-	$columnName = "*";
-	$tableName = "customers";
-	$whereValue["customer_email"] = $_POST['user_email'];
-	$whereValue["customer_password"] = sha1($_POST['user_pass']);
-	$userLogin = $eloquent->selectData($columnName, $tableName, @$whereValue);
-	
-	if($userLogin > 0)
-	{
-		#== CREATE A SESSION FOR USER ENTIRE FRONT END APPLICATION
-		if(!empty($userLogin))
-		{
-			$_SESSION['SSCF_login_time'] = date("Y-m-d H:i:s");
-			$_SESSION['SSCF_login_id'] = $userLogin[0]['id'];
-			$_SESSION['SSCF_login_user_name'] = $userLogin[0]['customer_name'];
-			$_SESSION['SSCF_login_user_email'] = $userLogin[0]['customer_email'];
-			$_SESSION['SSCF_login_user_mobile'] = $userLogin[0]['customer_mobile'];
-			$_SESSION['SSCF_login_user_address'] = $userLogin[0]['customer_address'];
-		}
-	}
-}
-## ===*=== [W]HEN USER TRY TO LOG IN ===*=== ##
 
 
 ## ===*=== [I]NSERT DATA FOR NEW USER ===*=== ##
@@ -138,192 +102,29 @@ if(isset($_POST['customerRegistration']))
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-12">
-				<!-- <div class="text-center">
-					<ul class="checkout-progress-bar">
-						<li class="active"><span>Orders & Shipping</span></li>	
-						<li><span>Payment Integration</span></li>	
-						<li><span>Review &amp; Status</span></li>
-					</ul>
-				</div> -->
-				
-				<?php
-					#== SUBMISSION CONFIRMATION IMAGE WHEN ORDER PLACED IS SUCCESFULLY DONE
-					// if(isset($_POST['submit_order']))
-					// {
-					// 	if(@$saveorderDetails > 0)
-					// 	echo '
-					// 	<div class="d-flex justify-content-center">
-					// 		<img src="public/assets/images/success.png" alt="" class="img-fluid">
-					// 	</div>
-					// 	<div class="alert alert-success alert-dismissible fade show" role="alert">
-					// 		Dear Mr. <strong> ' . $_SESSION['SSCF_login_user_name'] . ' </strong>, 
-					// 		thanks for your order submission. Please fill up the below <b> Shipping Details </b>, so that we delivered your product at your destination.
-					// 		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-					// 			<span aria-hidden="true">&times;</span>
-					// 		</button>
-					// 	</div>';
-					// }
-					
-					#== LOGGED IN CONFIRMATION MESSAGE
-					if( isset($_POST['user_login']) )
-					{
-						if(@$_SESSION['SSCF_login_id'] > 0)
-						echo '
-						<div class="alert alert-success alert-dismissible fade show" role="alert">
-							Dear Mr. <strong> ' . $_SESSION['SSCF_login_user_name'] . ' </strong>, 
-							thanks for your order submission. Please fill up the below <b> Shipping Details </b>, so that we delivered your product at your destination.
-							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-						</div>';
-					}
-					
-					#== REGISTRATION CONFIRMATION MESSAGE
-					else if(isset($_POST['customerRegistration']))
-					{
-						if($registerCustomer['LAST_INSERT_ID'] > 0)
-						echo '
-						<div class="alert alert-success alert-dismissible fade show" role="alert">
-							Dear Customer you have succesfully <b> Registered</b>.
-							Please <b> Login </b> and submit your shipping address details.
-							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-						</div>';
-					}
-				?>
-
-			</div>
-		</div>
-		<div class="mb-6">
-			<!-- CREATE A EMPTY SPACE BETWEEN CONTENT -->
-		</div>
-		<div class="row">
-			<div class="col-lg-12">
-				<div class="row">
-					<!-- <div class="col-lg-5">
-						<ul class="checkout-steps">
-							<h2 class="step-title">Log In</h2>
-							<li>
-								<form action="" method="post">
-									<div class="form-group required-field">
-										<div class="form-control-tooltip">
-											<input type="email" name="user_email" class="form-control" placeholder="type your email address" required>
-											<span class="input-tooltip" data-toggle="tooltip" title="We'll send your order confirmation here." data-placement="right">
-												<i class="icon-question-circle"></i>
-											</span>
-										</div>
-									</div>
-									<div class="form-group required-field">
-										<input type="password" name="user_pass" class="form-control" placeholder="type your password" required>
-									</div>
-									<p>You already have an account with us. Sign in or continue..</p>
-									<div class="form-footer">
-										<button type="submit" name="user_login" class="btn btn-primary">LOGIN</button>
-										<a href="forgot-password.php" class="forget-pass"> Forgot your password?</a>
-									</div>
-								</form>
-							</li>
-							<div class="checkout-discount">
-								<h2 class="step-title">
-									<a data-toggle="collapse" href="#checkout-discount-section" class="collapsed" role="button" aria-expanded="false" aria-controls="checkout-discount-section">
-										Create a New Account
-									</a>
-								</h2>
-								<li>
-									<div class="collapse" id="checkout-discount-section">
-										<form action="" method="post">
-											<div class="row">
-												<div class="col-sm-12">
-													<div class="row">
-														<div class="col-md-6">
-															<div class="form-group required-field">
-																<label for="acc-name">First Name</label>
-																<input type="text" class="form-control" name="acc_Firstname" placeholder="type your first name" required>
-															</div>
-														</div>
-														<div class="col-md-6">
-															<div class="form-group required-field">
-																<label for="acc-mname">Last Name</label>
-																<input type="text" class="form-control"  name="acc_Lastname" placeholder="type your last name" required>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="form-group required-field">
-												<label for="acc-email">Email</label>
-												<input type="email" class="form-control"  name="acc_Emailadd" placeholder="type your mail address e.g. someone@gmail.com" required>
-											</div>
-											<div class="row">
-												<div class="col-sm-12">
-													<div class="row">
-														<div class="col-md-7">
-															<div class="form-group required-field">
-																<label for="acc-password">Password</label>
-																<input type="password" class="form-control" name="acc_Setpass" placeholder="e.g. some@one#$num%" required>
-															</div>					
-														</div>									
-														<div class="col-md-5">
-															<div class="form-group required-field">
-																<label for="acc-password">Mobile No</label>
-																<input type="text" class="form-control" name="acc_Setmobile" placeholder="01*********" required>
-															</div>					
-														</div>					
-													</div>					
-												</div>					
-											</div>	
-											<div class="form-group required-field">
-												<label for="acc-email">Your Address</label>
-												<input type="text" class="form-control" name="acc_Setaddress" placeholder="type your address please..." required>
-											</div>
-											<div class="required text-left">* Required Field</div>
-											<div class="form-footer">
-												<div class="form-footer-left">
-													<button type="submit" name="customerRegistration" class="btn btn-primary">Register</button>
-												</div>
-											</div>
-										</form>
-									</div>
-								</li>
-							</div>
-						</ul>
-					</div> -->
 					<div class="col-lg-5 offset-lg-2">
 						<ul class="checkout-steps">
 							<li>
-								<h2 class="step-title mb-2">معلومات الشراء</h2>
+								<h2 class="step-title mb-2">Purchase Information</h2>
 								<form action="payments.php" method="post">
 									<div class="form-group required-field">
-										<label>الاسم كامل  </label>
+										<label>Full Name  </label>
 										<input type="text" id="f1" name="shipadd_fname" class="form-control">
 									</div>
-									<!-- <div class="form-group required-field">
-										<label>Last Name </label>
-										<input type="text" id="f2" name="shipadd_lname" class="form-control">
-									</div> -->
-									<!-- <div class="form-group">
-										<label>Profession <span class="text-warning">(optional)</span></label>
-										<input type="text" name="shipadd_cmpny" class="form-control">
-									</div> -->
 									<div class="form-group required-field">
-										<label>العنوان بالتفصيل : مدينة - منطقة - شارع </label>
+										<label>Detailed Address: City - Area - Street </label>
 										<input type="text" id="f3" name="shipadd_stadd" class="form-control">
 									</div>
 									<div class="form-group required-field">
-										<label>محافظة</label>
+										<label>Governorate</label>
 										<input type="text" id="f4" name="shipadd_cty" class="form-control">
 									</div>
-									<!-- <div class="form-group required-field">
-										<label>Zip/Postal Code</label>
-										<input type="text" id="f5" name="shipadd_zopc" class="form-control">
-									</div> -->
 									<div class="form-group">
 										<!-- <label>Country</label> -->
 										<input type="text" name="shipadd_cntry" class="form-control" value="ُEgypt" hidden>
 									</div>
 									<div class="form-group required-field">
-										<label>رقم التليفون </label>
+										<label>Phone Number </label>
 										<div class="form-control-tooltip">
 											<input type="حاخىث" id="f6" name="shipadd_phn" class="form-control">
 											<span class="input-tooltip" data-toggle="tooltip" title="For delivery questions." data-placement="right">
@@ -332,7 +133,7 @@ if(isset($_POST['customerRegistration']))
 										</div>
 									</div>
 									<div class="form-group required-field">
-										<label>ملاحظات (اختياري) </label>
+										<label>Notes (Optional) </label>
 										<div class="form-control-tooltip">
 											<input type="text" id="f6" name="notice" class="form-control">
 											<span class="input-tooltip" data-toggle="tooltip" title="For delivery questions." data-placement="right">
@@ -342,7 +143,7 @@ if(isset($_POST['customerRegistration']))
 									</div>
 										<div id="error-message"></div>
 									<button type="submit" name="proceed_to_payment" id="save-data" class="btn btn-sm btn-warning float-right"> 
-										أكد المعلومات
+										Confirm Information
 									</button>
 								</form>
 							</li>

@@ -7,16 +7,13 @@ $eloquent = new Eloquent;
 
 if( isset($_POST['user_login']) )
 {
-	// echo"///////////////////////////////// right /////////////////////////////";
 	$columnName = "*";
 	$tableName = "customers";
 	$whereValue["customer_email"] = $_POST['user_email'];
 	$whereValue["customer_password"] = sha1($_POST['user_pass']);
 	$userLogin = $eloquent->selectData($columnName, $tableName, @$whereValue);
-	// echo $userLogin;
 	if(!empty($userLogin))
 	{
-		// echo"///////////////////////////////// left /////////////////////////////";
 		$_SESSION['SSCF_login_time'] = date("Y-m-d H:i:s");
 		$_SESSION['SSCF_login_id'] = $userLogin[0]['id'];
 		$_SESSION['SSCF_login_user_name'] = $userLogin[0]['customer_name'];
@@ -67,14 +64,14 @@ if( isset($_POST['user_login']) )
 										<div class="form-row">
 											<div class="form-group col">
 												<label class="font-weight-bold text-dark text-2">E-mail</label>
-												<input type="email" name="user_email" class="form-control form-control-lg" placeholder="اكتب الايميل" required>
+												<input type="email" name="user_email" class="form-control form-control-lg" placeholder="Email" required>
 											</div>
 										</div>
 										<div class="form-row">
 											<div class="form-group col">
 												<a class="float-right" href="user-password.php">(forget password   ؟?)</a>
 												<label class="font-weight-bold text-dark text-2"> password</label>
-												<input type="password" name="user_pass" class="form-control form-control-lg" placeholder="اكتب كلمة السر" required>
+												<input type="password" name="user_pass" class="form-control form-control-lg" placeholder="password" required>
 											</div>
 										</div>
 										<div class="form-row">
